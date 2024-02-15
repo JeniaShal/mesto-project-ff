@@ -4,24 +4,37 @@ const cardItem = cardTemplate.querySelector('.card').cloneNode(true);
 
 // @todo: DOM узлы
 const cardPlayList = document.querySelector('.places__list');
-let cardImage = cardItem.querySelector('.card__image');
+
 let cardTitle = cardItem.querySelector('.card__title');
 console.log(cardTitle.textContent);
 
+
+  function addCard(cardImage) {
+    cardItem.querySelector('.card__image').src = cardImage;
+    cardItem.querySelector('.card__title').textContent = cardTitle
+    cardPlayList.append(cardItem);
+   };
+
+   addCard(initialCards.forEach (function(element){
+    cardImage = element.link;
+    cardTitle = element.name;
+   }))
+
+   addButton.addEventListener('click', addSong);
+
 // @todo: Функция создания карточки
-function addCard(cardImage) {
+// function addCard(cardImage) {
   
-      initialCards.forEach(function(element){
-      cardImage.src = element.link;
+//       initialCards.forEach(function(element){
+//       cardImage.src = element.link;
 
-      // cardTitle.textContent = `${element.name}`;
-  });
+//       // cardTitle.textContent = `${element.name}`;
+//   });
   
-  return cardItem
-
-  
-};
-cardPlayList.append(addCard(cardImage));
+//   return cardItem
+ 
+// };
+// cardPlayList.append(addCard(cardImage));
 
 
  
