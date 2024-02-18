@@ -2,34 +2,42 @@
 const cardTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
-const cardPlayList = document.querySelector('.places__list');
+const cardContainer = document.querySelector('.places__list');
+let card = cardTemplate.querySelector('.card');
 
 // @todo: Функция создания карточки
-initialCards.forEach(function addCard(item) {
-  let cardItem = cardTemplate.querySelector('.card').cloneNode(true); //клонировать шаблон
-  cardItem.querySelector('.card__image').src = item.link; //установить значения вложенных элементов
-  cardItem.querySelector('.card__image').alt = item.link;
-  cardItem.querySelector('.card__title').textContent = item.name;
-// @todo: Функция удаления карточки
+function createCard(data, cardFunction) {
+  const cardItem = card.cloneNode(true);                                //клонировать шаблон
+  const cardImage = cardItem.querySelector('.card__image');             //установить значения вложенных элементов
+  const cardTitle = cardItem.querySelector('.card__title');
   const delButton = cardItem.querySelector('.card__delete-button');
-  delButton.addEventListener('click', delCard); //добавить обработчик клика для удаления карточки
-    function delCard(evt) {
-    const delIcon = evt.target.closest('.card');
+  cardImage.src = data.link
+  cardImage.alt = data.link;
+  cardTitle.textContent = data.name;
+  delButton.addEventListener('click', cardFunction);                    //добавить обработчик клика для любой обработки  карточки
+  card = cardItem
+  return card;
+}
+  
+  
+// @todo: Функция удаления карточки
+  function delCard(event) {
+    const delIcon = event.target.closest('.card');
     delIcon.remove();
   };
-// @todo: Вывести карточки на страницу
-  cardPlayList.append(cardItem)
+  
+    
+// @todo: Вывести карточки на страницу    
+initialCards.forEach(function (item) {                              
+ createCard(item, delCard);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
+ cardContainer.append(card);
 });
-  
-    
-    
-    
-  
 
 
-
+   
 
  
+
 
 
 
