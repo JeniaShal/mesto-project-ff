@@ -6,7 +6,7 @@ const cardContainer = document.querySelector('.places__list');
 let card = cardTemplate.querySelector('.card');
 
 // @todo: Функция создания карточки
-function createCard(data, cardFunction) {
+function createCard(data, onDelete) {
   const cardItem = card.cloneNode(true);                                //клонировать шаблон
   const cardImage = cardItem.querySelector('.card__image');             //установить значения вложенных элементов
   const cardTitle = cardItem.querySelector('.card__title');
@@ -14,22 +14,20 @@ function createCard(data, cardFunction) {
   cardImage.src = data.link
   cardImage.alt = data.link;
   cardTitle.textContent = data.name;
-  delButton.addEventListener('click', cardFunction);                    //добавить обработчик клика для любой обработки  карточки
+  delButton.addEventListener('click', onDelete);                    //добавить обработчик клика для любой обработки  карточки
   card = cardItem
   return card;
 }
-  
-  
+    
 // @todo: Функция удаления карточки
-  function delCard(event) {
+  function deleteCard(event) {
     const delIcon = event.target.closest('.card');
     delIcon.remove();
   };
-  
-    
+      
 // @todo: Вывести карточки на страницу    
 initialCards.forEach(function (item) {                              
- createCard(item, delCard);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
+ createCard(item, deleteCard);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
  cardContainer.append(card);
 });
 
