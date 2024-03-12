@@ -1,14 +1,12 @@
 import './pages/index.css';
 import { initialCards } from './cards';
 
-
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
 const cardContainer = document.querySelector('.places__list');
 let card = cardTemplate.querySelector('.card');
-const popupNewCard = document.querySelector('.popup_type_new-card');//поле новой карточки
 const profileEditButton = document.querySelector('.profile__edit-button'); //кнопка редактирования профиля
 const newCardButton = document.querySelector('.profile__add-button'); //кнопка добавления карточки
 
@@ -30,27 +28,44 @@ function createCard(data, onDelete, onPopup) {
 }
     
 // @todo: Функция удаления карточки
-  function deleteCard(event) {
-    const delIcon = event.target.closest('.card');
-    delIcon.remove();
-  };
+function deleteCard(event) {
+  const delIcon = event.target.closest('.card');
+  delIcon.remove();
+};
 
-   //функция выведения поля добавления
-   function showCardContent(evt) {
-    const cardContent = document.querySelector('.popup_type_image');
-    const cardImage = cardContent.querySelector('.popup__image');
-    const cardText = cardContent.querySelector('.popup__caption');
-    const popupCloseButton = cardContent.querySelector('.popup__close');
+   //функция выведения большой карточки
+function showCardContent(evt) {
+  const cardContent = document.querySelector('.popup_type_image');
+  const cardLargeImage = cardContent.querySelector('.popup__image');
+  const cardCaption = cardContent.querySelector('.popup__caption');
+  const popupCloseButton = cardContent.querySelector('.popup__close');
     
-    cardContent.classList.add('popup_is-opened');
-    cardImage.src = evt.link;
-    cardImage.alt = evt.name;
-    cardText.textContent = evt.name;
+  cardLargeImage.src = evt.link;
+  cardLargeImage.alt = evt.name;
+  cardCaption.textContent = evt.name;
 
-    popupCloseButton.addEventListener('click', function() {
-      onClose(popupCloseButton);
+  handleModalCard(cardContent, popupCloseButton);
+};
+
+  //функция открытия и закрытия модального окна 
+function handleModalCard (card, button) {
+  card.classList.add('popup_is-opened');
+
+  button.addEventListener('click', function() {
+    onClose(button);
+  });
+
+  window.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape') {
+      onClose(card);
+      };
     });
-  }
+
+  card.addEventListener('click', function(){
+    onClose(card);
+  });
+}
+  
 
 // @todo: Вывести карточки на страницу    
 initialCards.forEach(function (item) {                              
@@ -59,37 +74,25 @@ initialCards.forEach(function (item) {
 });
 
 //открытие поля "редактировать профиль" по кнопке "редактировать" 
-profileEditButton.addEventListener('click', showPopupEdit);
+profileEditButton.addEventListener('click', function() {
+  const popupEdit = document.querySelector('.popup_type_edit');
+  const popupCloseButton = popupEdit.querySelector('.popup__close');
+  handleModalCard (popupEdit, popupCloseButton);
+});
 
-  //функция выведения поля редактирования
-function showPopupEdit() {
-   const popupEdit = document.querySelector('.popup_type_edit')
-   popupEdit.classList.add('popup_is-opened');
-
-   const popupCloseButton = popupEdit.querySelector('.popup__close');
-   popupCloseButton.addEventListener('click', function() {
-    onClose(popupCloseButton);
-   });
-}
-
+  
 //открытие поля "новая карточка" по кнопке "добавить" 
-newCardButton.addEventListener('click', showPopupAdd);
+newCardButton.addEventListener('click', function () {
+  const popupAdd = document.querySelector('.popup_type_new-card');
+  const popupCloseButton = popupAdd.querySelector('.popup__close');
+  handleModalCard (popupAdd, popupCloseButton);
+});
 
-  //функция выведения поля добавления
-  function showPopupAdd() {
-    const popupAdd = document.querySelector('.popup_type_new-card')
-    popupAdd.classList.add('popup_is-opened');
-
-    const popupCloseButton = popupAdd.querySelector('.popup__close');
-    popupCloseButton.addEventListener('click', function() {
-      onClose(popupCloseButton);
-    });
-  }
-
-  function onClose(evt) {
-    const popupToClose = evt.closest('.popup'); 
-    popupToClose.classList.remove('popup_is-opened');
-  }
+//функция закрытия окна  
+function onClose(evt) {
+  const popupToClose = evt.closest('.popup'); 
+  popupToClose.classList.remove('popup_is-opened');
+}
 
 
 
