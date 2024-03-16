@@ -19,8 +19,10 @@ const newPlaceForm = document.forms.new_place;                                  
 const placeInput = newPlaceForm.elements.place_name;                             //поле названия карточки
 const urlInput = newPlaceForm.elements.link;                                     //поле ссылки на карточку
 
+import { onClose } from './components/card';
+
 // @todo: Функция создания карточки
-function createCard(data, onDelete, onPopup) {
+function createCard(data, onDelete, onPopup, onLike) {
   const cardItem = card.cloneNode(true);                                //клонировать шаблон
   const cardImage = cardItem.querySelector('.card__image');             //установить значения вложенных элементов
   const cardTitle = cardItem.querySelector('.card__title');
@@ -60,53 +62,24 @@ function showCardContent(evt) {
   handleModalCard(cardContent, popupCloseButton);
 };
 
-// Функция лайка
-function handleLike(icon) {
-  icon.classList.toggle('card__like-button_is-active');
-}
+import { handleLike } from './components/card';
 
-// Функция открытия и закрытия модального окна 
-function handleModalCard (modalCard, button) {
-  modalCard.classList.add('popup_is-opened');
-
-  button.addEventListener('click', function() {
-    onClose(button);
-  });
-
-  window.addEventListener('keydown', function(e) {
-    if(e.key === 'Escape') {
-      onClose(modalCard);
-      };
-    });
-
-  modalCard.addEventListener('click', function(evt){
-    if (evt.target.classList.contains('popup')) {
-      onClose(modalCard)
-    };
-  });
-}
-
-// Функция закрытия окна  
-function onClose(evt) {
-  const popupToClose = evt.closest('.popup'); 
-  popupToClose.classList.remove('popup_is-opened');
-}
+import { handleModalCard } from './components/modals';
 
 // @todo: Вывести карточки на страницу    
 initialCards.forEach(function (item) {                              
- createCard(item, deleteCard, showCardContent);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
+ createCard(item, deleteCard, showCardContent, handleLike);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
  cardContainer.append(card);
 });
+
+import { openModal } from './components/modals';
 
 // Обработчик кнопки "редактировать профиль" - открытие модального окна редактирования 
 profileEditButton.addEventListener('click', function() {
   const popupEdit = document.querySelector('.popup_type_edit');
   const popupCloseButton = popupEdit.querySelector('.popup__close');
   handleModalCard (popupEdit, popupCloseButton);
-  const name = prflEditForm.elements.name;
-  const description = prflEditForm.elements.description; 
-  name.value = prflTitle.textContent;
-  description.value = prflDescribtion.textContent;
+  openModal (prflEditForm, prflTitle, prflDescribtion);
 });
 
 
