@@ -25,6 +25,7 @@ function createCard(data, onDelete, onPopup) {
   const cardImage = cardItem.querySelector('.card__image');             //установить значения вложенных элементов
   const cardTitle = cardItem.querySelector('.card__title');
   const delButton = cardItem.querySelector('.card__delete-button');
+  const likeButton = cardItem.querySelector('.card__like-button');
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
@@ -32,6 +33,9 @@ function createCard(data, onDelete, onPopup) {
   cardImage.addEventListener('click', ()=>{
     onPopup(data);
   });
+  likeButton.addEventListener('click', ()=> {
+    onLike(likeButton)
+  }); 
   card = cardItem
   return card;
 }
@@ -55,6 +59,11 @@ function showCardContent(evt) {
 
   handleModalCard(cardContent, popupCloseButton);
 };
+
+// Функция лайка
+function handleLike(icon) {
+  icon.classList.toggle('card__like-button_is-active');
+}
 
 // Функция открытия и закрытия модального окна 
 function handleModalCard (modalCard, button) {
@@ -100,18 +109,13 @@ profileEditButton.addEventListener('click', function() {
   description.value = prflDescribtion.textContent;
 });
 
-// Функция сабмита модального окна "редактировать профиль"
-function handleFormSubmit(evt){
-  evt.preventDefault();
-  prflTitle.textContent = nameInput.value;
-  prflDescribtion.textContent = jobInput.value;
-  const formToClose = nameInput.closest('.popup');
-  onClose (formToClose);
-}
 
+import { handleFormSubmit } from './components/modals'
 // Обработчик сабмита модального окна "редактировать профиль"
-formElement.addEventListener('submit', handleFormSubmit);
-
+formElement.addEventListener('submit', function (evt) {
+evt.preventDefault();
+handleFormSubmit(prflTitle, nameInput, prflDescribtion, jobInput, onClose);
+});
   
 // Обработчик кнопки "добавить место" - открытие модального окна "новая карточка" 
 newCardButton.addEventListener('click', function () {
@@ -120,21 +124,12 @@ newCardButton.addEventListener('click', function () {
   handleModalCard (popupAdd, popupCloseButton);
 });
 
-// Функция сабмита модального окна "добавить новую карточку"
-function addPlaceSubmit(){
-  const item = {};
-  item.name = placeInput.value;
-  item.link = urlInput.value;
-  createCard(item, deleteCard, showCardContent);                                           
-  cardContainer.prepend(card);
-  const formToClose = nameInput.closest('.popup');
-  onClose (formToClose);
-}
+import { addPlaceSubmit } from './components/modals';
 
 // Обработчк сабмита модального окна "добавить новую карточку"
 newPlaceForm.addEventListener('submit', function(evt){
   evt.preventDefault();
-  addPlaceSubmit();
+  addPlaceSubmit(placeInput, urlInput, createCard, deleteCard, showCardContent, cardContainer, card, nameInput, onClose);
   newPlaceForm.reset();
 });
 
