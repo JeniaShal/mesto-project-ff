@@ -42,25 +42,9 @@ function createCard(data, onDelete, onPopup, onLike) {
   return card;
 }
     
-// @todo: Функция удаления карточки
-function deleteCard(event) {
-  const delIcon = event.target.closest('.card');
-  delIcon.remove();
-};
+import { deleteCard } from './components/card';
 
-// Функция выведения большой карточки
-function showCardContent(evt) {
-  const cardContent = document.querySelector('.popup_type_image');
-  const cardLargeImage = cardContent.querySelector('.popup__image');
-  const cardCaption = cardContent.querySelector('.popup__caption');
-  const popupCloseButton = cardContent.querySelector('.popup__close');
-    
-  cardLargeImage.src = evt.link;
-  cardLargeImage.alt = evt.name;
-  cardCaption.textContent = evt.name;
-
-  handleModalCard(cardContent, popupCloseButton);
-};
+import { showCardContent } from './components/card';
 
 import { handleLike } from './components/card';
 
