@@ -53,7 +53,7 @@ import { handleModalCard } from './components/modals';
 // @todo: Вывести карточки на страницу    
 initialCards.forEach(function (item) {                              
  createCard(item, deleteCard, showCardContent, handleLike);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
- cardContainer.append(card);
+ cardContainer.prepend(card);
 });
 
 import { openModal } from './components/modals';
