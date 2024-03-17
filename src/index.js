@@ -1,12 +1,10 @@
 import './pages/index.css';
 import { initialCards } from './cards';
-
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
+import {createCard} from './components/card'
 
 // @todo: DOM узлы
 const cardContainer = document.querySelector('.places__list');
-let card = cardTemplate.querySelector('.card');
+// let card = cardTemplate.querySelector('.card');
 const profileEditButton = document.querySelector('.profile__edit-button');      //кнопка редактирования профиля
 const newCardButton = document.querySelector('.profile__add-button');           //кнопка добавления карточки
 const prflEditForm = document.forms.edit_profile;                               //форма редактирования профиля
@@ -20,28 +18,7 @@ const placeInput = newPlaceForm.elements.place_name;                            
 const urlInput = newPlaceForm.elements.link;                                     //поле ссылки на карточку
 
 import { onClose } from './components/card';
-
-// @todo: Функция создания карточки
-function createCard(data, onDelete, onPopup, onLike) {
-  const cardItem = card.cloneNode(true);                                //клонировать шаблон
-  const cardImage = cardItem.querySelector('.card__image');             //установить значения вложенных элементов
-  const cardTitle = cardItem.querySelector('.card__title');
-  const delButton = cardItem.querySelector('.card__delete-button');
-  const likeButton = cardItem.querySelector('.card__like-button');
-  cardImage.src = data.link;
-  cardImage.alt = data.name;
-  cardTitle.textContent = data.name;
-  delButton.addEventListener('click', onDelete);                    //добавить обработчик клика для любой обработки  карточки
-  cardImage.addEventListener('click', ()=>{
-    onPopup(data);
-  });
-  likeButton.addEventListener('click', ()=> {
-    onLike(likeButton)
-  }); 
-  card = cardItem
-  return card;
-}
-    
+  
 import { deleteCard } from './components/card';
 
 import { showCardContent } from './components/card';
@@ -51,9 +28,9 @@ import { handleLike } from './components/card';
 import { handleModalCard } from './components/modals';
 
 // @todo: Вывести карточки на страницу    
-initialCards.forEach(function (item) {                              
- createCard(item, deleteCard, showCardContent, handleLike);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
- cardContainer.append(card);
+initialCards.forEach(function (item) {
+  const card = createCard(item, deleteCard, showCardContent, handleLike);                                             //присвоить функции переменную из массива initialCards и функцию удаления карточки в качестве колбэка
+  cardContainer.append(card);
 });
 
 import { openModal } from './components/modals';
