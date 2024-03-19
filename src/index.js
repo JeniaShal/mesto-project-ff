@@ -17,13 +17,13 @@ const cardContainer = document.querySelector('.places__list');
 
 // редактирование профиля
 const profileEditButton = document.querySelector('.profile__edit-button');      //кнопка редактирования профиля
-const profileTitle = document.querySelector('.profile__title');                    //заголовок с именем профиля, нужен, чтобы отображаться при открытии формы редактирования профиля
-const profileDescribtion = document.querySelector('.profile__description');        //заголовок с работой, нужен, чтобы отображаться при открытии формы редактирования профиля
+const profileTitle = document.querySelector('.profile__title');                 //заголовок с именем профиля, нужен, чтобы отображаться при открытии формы редактирования профиля
+const profileDescribtion = document.querySelector('.profile__description');     //заголовок с работой, нужен, чтобы отображаться при открытии формы редактирования профиля
 const formElement = document.querySelector('.popup__form');                     //форма редактирования (общая)
 const nameInput = formElement.querySelector('.popup__input_type_name');         //поле имени
 const jobInput = formElement.querySelector('.popup__input_type_description');   //поле вида деятельности
 const popupEdit = document.querySelector('.popup_type_edit');                   //попап редактирования профиля 
-const profileEditForm = document.forms.edit_profile;                               //форма редактирования профиля
+const profileEditForm = document.forms.edit_profile;                            //форма редактирования профиля
 
 
 
@@ -33,9 +33,9 @@ const newPlaceForm = document.forms.new_place;                                  
 const placeInput = newPlaceForm.elements.place_name;                            //поле названия карточки
 const urlInput = newPlaceForm.elements.link;                                    //поле ссылки на карточку
 const popupAdd = document.querySelector('.popup_type_new-card');                //попап добавления новой карточки
-const cardContent = document.querySelector('.popup_type_image');
-const cardLargeImage = cardContent.querySelector('.popup__image');
-const cardCaption = cardContent.querySelector('.popup__caption');
+const cardContent = document.querySelector('.popup_type_image');                //контейнер большой карточки 
+const cardLargeImage = cardContent.querySelector('.popup__image');              //большая карточка
+const cardCaption = cardContent.querySelector('.popup__caption');               //подпись к карточке
 
 //общее
 const popupCloseButton = popupEdit.querySelector('.popup__close');              //кнопка закрытия 
