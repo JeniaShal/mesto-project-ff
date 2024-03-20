@@ -1,6 +1,3 @@
-const cardContent = document.querySelector('.popup_type_image');
-const cardLargeImage = cardContent.querySelector('.popup__image');
-const cardCaption = cardContent.querySelector('.popup__caption');
 
 // Функция открытия модального окна
 export function openModalCard (modalCard) {
@@ -32,28 +29,9 @@ export function closeModalCard (modalCard) {
   });
 }
 
-// Функция сабмита модального окна "редактировать профиль"
-export function handleEditFormSubmit(title, nameField, description, jobField, closeCard){
-  title.textContent = nameField.value;
-  description.textContent = jobField.value;
-  const formToClose = nameField.closest('.popup');
-  closeCard (formToClose);
-}
 
-// Функция сабмита модального окна "добавить новую карточку"
-export function addPlaceSubmit(place, url){
-  const item = {};
-  item.name = place.value;
-  item.link = url.value;
-  return item;
-}
 
-// Функция выведения большой карточки
-export function showCardContent(item) {
-  cardLargeImage.src = item.link;
-  cardLargeImage.alt = item.name;
-  cardCaption.textContent = item.name;
-  openModalCard(cardContent);
-  closeModalCard(cardContent);
-};
+
+
+
 
