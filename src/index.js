@@ -99,7 +99,8 @@ function openProfileAddPopup () {
 }
 
 // Функция сабмита модального окна "редактировать профиль"
-function handleEditFormSubmit(){
+function handleEditFormSubmit(evt){
+  evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescribtion.textContent = jobInput.value;
   const formToClose = nameInput.closest('.popup');
@@ -118,10 +119,7 @@ function addPlaceSubmit(){
 profileEditButton.addEventListener('click', openProfileEditPopup);
 
 // Обработчик сабмита модального окна "редактировать профиль"
-formElement.addEventListener('submit', function (evt) {
-evt.preventDefault();
-handleEditFormSubmit();
-});
+formElement.addEventListener('submit', handleEditFormSubmit);
   
 // Обработчик кнопки "добавить место" - открытие модального окна "новая карточка" 
 newCardButton.addEventListener('click', openProfileAddPopup);
@@ -132,10 +130,8 @@ newPlaceForm.addEventListener('submit', function(evt){
   const item = addPlaceSubmit();
   const card = createCard(item, deleteCard, showCardContent, handleLike);
   cardContainer.prepend(card);
-  popupCloseButton.addEventListener('click', function(){
-    onClose(popupCloseButton);
-  });
   newPlaceForm.reset();
+  onClose(newPlaceForm);
 });
 
 // @todo: Вывести карточки на страницу    
