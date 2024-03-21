@@ -1,6 +1,14 @@
+
+// Функция открытия модального окна
+export function openModalCard (modalCard) {
+  modalCard.classList.add('popup_is-opened');
+  document.addEventListener('keydown', closeOnEscape);
+  
+} 
+
 // Функция закрытия окна  
-export function onClose(evt) {
-  const popupToClose = evt.closest('.popup'); 
+export function onClose(element) {
+  const popupToClose = element.closest('.popup'); 
   popupToClose.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeOnEscape);
 }
