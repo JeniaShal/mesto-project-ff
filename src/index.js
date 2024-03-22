@@ -35,19 +35,7 @@ const cardCaption = cardContent.querySelector('.popup__caption');               
 
 //общее
 const popupCloseButtons = Array.from(document.querySelectorAll('.popup__close'));  //массив кнопок закрытия 
-
-
-// Функция закрытия модального окна по кнопке и оверлею
-function closeOnButtonAndOverlay (button) {
-  onClose(button);
-  const modalCard = button.closest('.popup');
-  modalCard.addEventListener('click', function(evt) {
-    if (
-      evt.target.classList.contains('popup')) {
-      onClose(modalCard);
-    }      
-  })
-}
+const modalCards = Array.from(document.querySelectorAll('.popup'));             //массив модальных окон
 
 // Функция выведения большой карточки
 function showCardContent(item) {
@@ -102,18 +90,31 @@ newCardButton.addEventListener('click', openProfileAddPopup);
 // Обработчк сабмита модального окна "добавить новую карточку"
 newPlaceForm.addEventListener('submit', handleAddFormSubmit);
 
-// @todo: Вывести карточки на страницу    
+// Вывести карточки на страницу    
 initialCards.forEach(function (item) {
   const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
   cardContainer.append(card);
 });
 
-popupCloseButtons.forEach(function(button) {
-  button.addEventListener('click', function() {
-    closeOnButtonAndOverlay(button);
-  });
+// Обработчик слушателя с функцией закрытия на все кнопки закрытия
+popupCloseButtons.forEach (function (button) {
+  button.addEventListener('click', function () {
+    const modalCard = button.closest('.popup');
+    onClose(modalCard);
+  }
 
+  );
 })
+
+
+// Обработчик слушателя закрытия по оверлею на все модальные окна
+modalCards.forEach (function (modalCard) {
+  modalCard.addEventListener('click', function(evt) {
+    if (evt.target.classList.contains('popup')) {
+      onClose(modalCard);
+    }      
+  });
+});
 
 
 
