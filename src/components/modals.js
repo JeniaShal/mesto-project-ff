@@ -7,9 +7,8 @@ export function openModalCard (modalCard) {
 } 
 
 // Функция закрытия окна  
-export function onClose(element) {
-  const popupToClose = element.closest('.popup'); 
-  popupToClose.classList.remove('popup_is-opened');
+export function onClose(modalCard) {
+  modalCard.classList.remove('popup_is-opened');
   document.removeEventListener('keydown', closeOnEscape);
 }
 
