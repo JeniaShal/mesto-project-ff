@@ -1,21 +1,21 @@
 // Функция показа сообщения об ошибке при введении текста в форму 
-function showInputError(popupForm, popupInput, errorMessage) {
+function showInputError(popupForm, popupInput, errorMessage, validationConfig) {
   const errorElement = popupForm.querySelector(`.${popupInput.id}-error`);
-  popupInput.classList.add('popup__input_type_error');
+  popupInput.classList.add(validationConfig.inputErrorClass);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__input-error_active');
+  errorElement.classList.add(validationConfig.errorClass);
 }
 
 // Функция удаления сообщения об ошибке при введении текста в форму
-function hideInputError (popupForm, popupInput) {
+function hideInputError (popupForm, popupInput, validationConfig) {
   const errorElement = popupForm.querySelector(`.${popupInput.id}-error`);
-  popupInput.classList.remove('popup__input_type_error')
-  errorElement.classList.remove('popup__input-error_active');
+  popupInput.classList.remove(validationConfig.inputErrorClass)
+  errorElement.classList.remove(validationConfig.errorClass);
   errorElement.textContent = '';
 }
 
 // Функция проверки поля формы
-function checkValidity(popupForm, popupInput) {
+function checkValidity(popupForm, popupInput, validationConfig) {
   if (popupInput.validity.patternMismatch) {
     popupInput.setCustomValidity(popupInput.dataset.error_message);
   }
@@ -26,10 +26,10 @@ function checkValidity(popupForm, popupInput) {
 
 
   if(!popupInput.validity.valid) {
-    showInputError(popupForm, popupInput, popupInput.validationMessage);
+    showInputError(popupForm, popupInput, popupInput.validationMessage, validationConfig);
   }
   else {
-    hideInputError(popupForm, popupInput);
+    hideInputError(popupForm, popupInput, validationConfig);
   }
 }
 
@@ -41,42 +41,46 @@ function hasInvalidInput (inputList) {
 }
 
 // Функция переключения кнопки в случае невалидности поля 
-function toggleButtonState (inputList, buttonElement) {
-  if (hasInvalidInput(inputList, buttonElement)) {
+function toggleButtonState (inputList, buttonElement, validationConfig) {
+  if (hasInvalidInput(inputList)) {
     buttonElement.setAttribute('disabled', true);
-    buttonElement.classList.add('popup__button_inactive');
+    buttonElement.classList.add(validationConfig.inactiveButtonClass);
   }
   else {
     buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove('popup__button_inactive');
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
   }
 }
 
 // Функция навешивающая обработчик ввода на все поля формы
-function setEventListeners (popupForm) {
-  const inputList = Array.from(popupForm.querySelectorAll('.popup__input'));
-  const buttonElement = popupForm.querySelector('.popup__button');
-  toggleButtonState(inputList, buttonElement);
+function setEventListeners (popupForm, validationConfig) {
+  const inputList = Array.from(popupForm.querySelectorAll(validationConfig.inputSelector));
+  const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, validationConfig);
 
   inputList.forEach(function(popupInput) {
     popupInput.addEventListener('input', function() {
-    checkValidity(popupForm, popupInput)
-    toggleButtonState(inputList, buttonElement);
+    checkValidity(popupForm, popupInput, validationConfig)
+    toggleButtonState(inputList, buttonElement, validationConfig);
    });
   })
 }
 
-export function clearValidation(popupForm) {
-  const buttonElement = popupForm.querySelector('.popup__button');
+// Функция очищения ошибок валидации и деактивации кнопки
+export function clearValidation(popupForm, validationConfig) {
+  const popupInput = popupForm.querySelector(validationConfig.inputSelector);
+  hideInputError(popupForm, popupInput, validationConfig);
+  
+  const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
   buttonElement.setAttribute('disabled', true);
-  buttonElement.classList.add('popup__button_inactive');
+  buttonElement.classList.add(validationConfig.inactiveButtonClass);
 }
 
 // Функция навешивания обработчика ввода на все формы документа
-export function enableValidation () {
-  const popupForms = Array.from(document.querySelectorAll('.popup__form'));
+export function enableValidation (validationConfig) {
+  const popupForms = Array.from(document.querySelectorAll(validationConfig.formSelector));
   popupForms.forEach(function(popupForm) {
-    setEventListeners (popupForm);
+    setEventListeners (popupForm, validationConfig);
   })
 }
 

@@ -42,6 +42,14 @@ const popupInputs = Array.from(document.querySelectorAll('.popup__input'));     
 const popupForm = document.querySelector('.popup__form');                       //форма в общем виде
 const popupInput = document.querySelector('.popup__input');                     //строка ввода в общем виде
       //форма ошибки при некорректном заполнении попапа
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+}
 
 // Функция выведения большой карточки
 function showCardContent(item) {
@@ -74,7 +82,7 @@ function handleAddFormSubmit(evt){
   cardContainer.prepend(card);
   newPlaceForm.reset();
   onClose(popupAdd);
-  clearValidation (popupAdd);
+  clearValidation (popupAdd, validationConfig);
 }
 
 // Функция сабмита модального окна "редактировать профиль"
@@ -83,19 +91,11 @@ function handleEditFormSubmit(evt){
   profileTitle.textContent = nameInput.value;
   profileDescribtion.textContent = jobInput.value;
   onClose (popupEdit);
-  clearValidation (popupEdit);
+  clearValidation (popupEdit, validationConfig);
 }
 
 // Запуск обработчика ввода на все формах документа
-enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: '.popup__button_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-  }); 
-
+enableValidation(validationConfig); 
 
 
 // Обработчик кнопки "редактировать профиль" - открытие модального окна редактирования 
