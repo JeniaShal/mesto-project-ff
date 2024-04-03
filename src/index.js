@@ -11,6 +11,8 @@ import {
   onClose,
 } from './components/modals';
 
+import { clearValidation, enableValidation } from './components/validation';
+
 // @todo: DOM узлы
 const cardContainer = document.querySelector('.places__list');
 
@@ -40,6 +42,14 @@ const popupInputs = Array.from(document.querySelectorAll('.popup__input'));     
 const popupForm = document.querySelector('.popup__form');                       //форма в общем виде
 const popupInput = document.querySelector('.popup__input');                     //строка ввода в общем виде
       //форма ошибки при некорректном заполнении попапа
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+}
 
 // Функция выведения большой карточки
 function showCardContent(item) {
@@ -72,6 +82,7 @@ function handleAddFormSubmit(evt){
   cardContainer.prepend(card);
   newPlaceForm.reset();
   onClose(popupAdd);
+  clearValidation (popupAdd, validationConfig);
 }
 
 // Функция сабмита модального окна "редактировать профиль"
@@ -80,78 +91,11 @@ function handleEditFormSubmit(evt){
   profileTitle.textContent = nameInput.value;
   profileDescribtion.textContent = jobInput.value;
   onClose (popupEdit);
+  clearValidation (popupEdit, validationConfig);
 }
 
-// Функция показа сообщения об ошибке при введении текста в форму 
-function showInputError(popupForm, popupInput, errorMessage) {
-  const errorElement = popupForm.querySelector(`.${popupInput.id}-error`);
-  popupInput.classList.add('popup__input_type_error');
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__input-error_active');
-}
-
-// Функция удаления сообщения об ошибке при введении текста в форму
-function hideInputError (popupForm, popupInput) {
-  const errorElement = popupForm.querySelector(`.${popupInput.id}-error`);
-  popupInput.classList.remove('popup__input_type_error')
-  errorElement.classList.remove('popup__input-error_active');
-  errorElement.textContent = '';
-}
-
-// Функция проверки поля формы
-function checkValidity(popupForm, popupInput) {
-  if(!popupInput.validity.valid) {
-    showInputError(popupForm, popupInput, popupInput.validationMessage);
-  }
-  else {
-    hideInputError(popupForm, popupInput);
-  }
-}
-
-// Функция поиска невалидных полей в форме
-function hasInvalidInput (inputList) {
-  return inputList.some(function (inputElement) {
-    return !inputElement.validity.valid;
-  })
-}
-
-// Функция переключения кнопки в случае невалидности поля 
-function toggleButtonState (inputList, buttonElement) {
-  if (hasInvalidInput(inputList, buttonElement)) {
-    buttonElement.setAttribute('disabled', true);
-    buttonElement.classList.add('popup__button_inactive');
-  }
-  else {
-    buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove('popup__button_inactive');
-  }
-}
-
-// Функция навешивающая обработчик ввода на все поля формы
-function setEventListeners (popupForm) {
-  const inputList = Array.from(popupForm.querySelectorAll('.popup__input'));
-  const buttonElement = popupForm.querySelector('.popup__button');
-  toggleButtonState(inputList, buttonElement);
-
-  inputList.forEach(function(popupInput) {
-    popupInput.addEventListener('input', function() {
-    checkValidity(popupForm, popupInput)
-    toggleButtonState(inputList, buttonElement);
-    });
-  })
-}
-
-// Функция навешивания обработчика ввода на все формы документа
-function validateForms () {
-  const popupForms = Array.from(document.querySelectorAll('.popup__form'));
-  popupForms.forEach(function(popupForm) {
-    setEventListeners (popupForm);
-  })
-}
-
-//запуск обработчика ввода на все формах документа
-validateForms();
-
+// Запуск обработчика ввода на все формах документа
+enableValidation(validationConfig); 
 
 
 // Обработчик кнопки "редактировать профиль" - открытие модального окна редактирования 
