@@ -11,7 +11,17 @@ import {
   onClose,
 } from './components/modals';
 
-import { clearValidation, enableValidation } from './components/validation';
+import { 
+  clearValidation, 
+  enableValidation 
+} from './components/validation';
+
+import {
+  getProfileData,
+  getInitialCards,
+  editProfile
+} from './components/api';
+
 
 // @todo: DOM узлы
 const cardContainer = document.querySelector('.places__list');
@@ -24,6 +34,7 @@ const formElement = document.querySelector('.popup__form');                     
 const nameInput = formElement.querySelector('.popup__input_type_name');         //поле имени
 const jobInput = formElement.querySelector('.popup__input_type_description');   //поле вида деятельности
 const popupEdit = document.querySelector('.popup_type_edit');                   //попап редактирования профиля 
+
 
 //добавление карточки
 const newCardButton = document.querySelector('.profile__add-button');           //кнопка добавления карточки
@@ -38,10 +49,8 @@ const cardCaption = cardContent.querySelector('.popup__caption');               
 //общее
 const popupCloseButtons = Array.from(document.querySelectorAll('.popup__close'));  //массив кнопок закрытия 
 const modalCards = Array.from(document.querySelectorAll('.popup'));             //массив модальных окон
-const popupInputs = Array.from(document.querySelectorAll('.popup__input'));     //массив попапов
-const popupForm = document.querySelector('.popup__form');                       //форма в общем виде
-const popupInput = document.querySelector('.popup__input');                     //строка ввода в общем виде
-      //форма ошибки при некорректном заполнении попапа
+const profileImage = document.querySelector('.profile__image');                 //картинка профиля
+
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -88,6 +97,7 @@ function handleAddFormSubmit(evt){
 // Функция сабмита модального окна "редактировать профиль"
 function handleEditFormSubmit(evt){
   evt.preventDefault();
+  editProfile();
   profileTitle.textContent = nameInput.value;
   profileDescribtion.textContent = jobInput.value;
   onClose (popupEdit);
@@ -110,11 +120,11 @@ newCardButton.addEventListener('click', openProfileAddPopup);
 // Обработчк сабмита модального окна "добавить новую карточку"
 newPlaceForm.addEventListener('submit', handleAddFormSubmit);
 
-// Вывести карточки на страницу    
-initialCards.forEach(function (item) {
-  const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
-  cardContainer.append(card);
-});
+// // Вывести карточки на страницу    
+// initialCards.forEach(function (item) {
+//   const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
+//   cardContainer.append(card);
+// });
 
 // Обработчик слушателя с функцией закрытия на все кнопки закрытия
 popupCloseButtons.forEach (function (button) {
@@ -134,7 +144,75 @@ modalCards.forEach (function (modalCard) {
 });
 
 
+Promise.all([getProfileData(), getInitialCards()])
+  .then (([profile, cards]) => {
+    profileTitle.textContent = profile.name
+    profileDescribtion.textContent = profile.about
+    profileImage.style.backgroundImage = `url(${profile.avatar})`
+    cards.forEach (function(item) {
+      const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
+      cardContainer.append(card);
+    })
+  })
+  .catch ((error) => {
+    console.log(error)
+  })
+
+editProfile();
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//  fetch('https://nomoreparties.co/v1/wff-cohort-10', {
+//   headers: {
+//     authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512'
+//   }
+// })
+//   .then(res => res.json())
+//   .then((result) => {
+//     console.log(result);
+//   }); 
+
+// fetch ('https://mesto.nomoreparties.co/v1/wff-cohort-10/cards', {
+//   headers: {
+//     authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512'}
+// })
+//   .then ((res) => {
+//     return res.json()
+//   })
+//   .then ((data) => {
+//     console.log(data)
+//   })
+
+
+// fetch ('https://mesto.nomoreparties.co/v1/wff-cohort-10/users/me', {
+//   headers: {
+//     authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512'}
+// })
+//   .then ((res) => {
+//     return res.json()
+//   })
+//   .then ((data) => {
+//     console.log(data)
+//   })
 

@@ -37,9 +37,11 @@
       <button type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit_profile" novalidate>
-        <input type="text" name="name" id="name__input" class="popup__input popup__input_type_name" placeholder="Имя" minlength="2" maxlength="20" pattern="^[A-Za-zА-Яа-яЁё\s\-]+$" data-error_message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+        <input type="text" name="name" id="name__input" class="popup__input popup__input_type_name" placeholder="Имя" minlength="2" maxlength="20" 
+        pattern="^[A-Za-zА-Яа-яЁё\s\-]+$" data-error_message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
         <span class = "popup__input-error name__input-error"></span>
-        <input type="text" name="description" id="description__input" class="popup__input popup__input_type_description" placeholder="Занятие" minlength="2" maxlength="200" pattern="^[A-Za-zА-Яа-яЁё\s\-]+$" data-error_message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+        <input type="text" name="description" id="description__input" class="popup__input popup__input_type_description" placeholder="Занятие" 
+        minlength="2" maxlength="200" pattern="^[A-Za-zА-Яа-яЁё\s\-]+$" data-error_message = "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
         <span class = "popup__input-error description__input-error"></span>
         <button type="submit" class="button popup__button">Сохранить</button>
       </form>
