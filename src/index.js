@@ -1,10 +1,9 @@
 import './pages/index.css';
-// import { initialCards } from './cards';
+
 import { 
   deleteCard,
   createCard,
-  handleLike,
-  toggleDelButton
+  
  } from './components/card';
 
 import { 
@@ -21,9 +20,9 @@ import {
   getProfileData,
   getInitialCards,
   editProfile,
-  addCardToServer
+  addCardToServer,
+  // deleteCardOnServer,
 } from './components/api';
-
 
 // @todo: DOM узлы
 const cardContainer = document.querySelector('.places__list');
@@ -41,8 +40,6 @@ const popupEdit = document.querySelector('.popup_type_edit');                   
 //добавление карточки
 const newCardButton = document.querySelector('.profile__add-button');           //кнопка добавления карточки
 const newPlaceForm = document.forms.new_place;                                  //форма добавления новой карточки
-const placeInput = newPlaceForm.elements.place_name;                            //поле названия карточки
-const urlInput = newPlaceForm.elements.link;                                    //поле ссылки на карточку
 const popupAdd = document.querySelector('.popup_type_new-card');                //попап добавления новой карточки
 const cardContent = document.querySelector('.popup_type_image');                //контейнер большой карточки 
 const cardLargeImage = cardContent.querySelector('.popup__image');              //большая карточка
@@ -120,10 +117,10 @@ Promise.all([getProfileData(), getInitialCards()])
     profileDescribtion.textContent = profile.about
     profileImage.style.backgroundImage = `url(${profile.avatar})`
     cards.forEach (function(item) {
-      const card = createCard(item, profile, deleteCard, showCardContent, handleLike);                                    
+      const card = createCard(item, profile, deleteCard, showCardContent);                                    
       cardContainer.append(card);
     })
-  })
+    })
   .catch ((error) => {
     console.log(error)
   })
