@@ -10,7 +10,9 @@
   const editProfileForm = document.forms.edit_profile;                      // форма редактирования профиля
   const editProfileNameInput = editProfileForm.elements.name                // инпут имени в форме редактирования профиля
   const editProfileDescriptionInput = editProfileForm.elements.description  // инпут профессии в форме редактирования профиля
-
+  const newPlaceForm = document.forms.new_place;                                    //форма добавления новой карточки
+  const placeInput = newPlaceForm.elements.place_name;                              //поле названия карточки
+  const urlInput = newPlaceForm.elements.link;                                      //поле ссылки на карточку
 
   // Функция выгрузки данных для профиля
 export function getProfileData () {
@@ -56,7 +58,7 @@ export function editProfile () {
     body: JSON.stringify ({
       name: `${editProfileNameInput.value}`,
       about: `${editProfileDescriptionInput.value}`,
-    })
+    }),
   })
   .then ((res) => {
     if (res.ok) {
@@ -65,7 +67,26 @@ export function editProfile () {
         // если ошибка, отклоняем промис
     return Promise.reject(`Ошибка: ${res.status}`);
   })
-  .then ((data) => { // удалить перед отправкой на ревью
-    console.log(data)
-  })
  }
+
+  // Функция отправки карточки на сервер
+  export function addCardToServer () {
+    return fetch (`${config.baseUrl}/cards`, {
+      method: 'POST',
+      headers: {
+        authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify ({
+        name: `${placeInput.value}`,
+        link: `${urlInput.value}`,
+      })
+    })
+    .then ((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+          // если ошибка, отклоняем промис
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+   }

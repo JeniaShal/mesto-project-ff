@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { initialCards } from './cards';
+// import { initialCards } from './cards';
 import { 
   deleteCard,
   createCard,
@@ -19,7 +19,8 @@ import {
 import {
   getProfileData,
   getInitialCards,
-  editProfile
+  editProfile,
+  addCardToServer
 } from './components/api';
 
 
@@ -68,9 +69,6 @@ function showCardContent(item) {
   openModalCard (cardContent);
 };
 
-nameInput.value = profileTitle.textContent;
-jobInput.value = profileDescribtion.textContent;
-
 // Функция открытия модального окна "редактировать профиль" 
 function openProfileEditPopup () {
   openModalCard (popupEdit);
@@ -85,10 +83,11 @@ function openProfileAddPopup () {
 function handleAddFormSubmit(evt){
   evt.preventDefault();
   const item = {};
-  item.name = placeInput.value;
-  item.link = urlInput.value;
-  const card = createCard(item, deleteCard, showCardContent, handleLike);
-  cardContainer.prepend(card);
+  addCardToServer()
+  .then ((data) =>{
+  const card = createCard(data, deleteCard, showCardContent, handleLike);
+  cardContainer.prepend(card)
+})
   newPlaceForm.reset();
   onClose(popupAdd);
   clearValidation (popupAdd, validationConfig);
@@ -97,12 +96,32 @@ function handleAddFormSubmit(evt){
 // Функция сабмита модального окна "редактировать профиль"
 function handleEditFormSubmit(evt){
   evt.preventDefault();
-  editProfile();
-  profileTitle.textContent = nameInput.value;
-  profileDescribtion.textContent = jobInput.value;
+  editProfile()
+  .then ((profile) => {
+    profileTitle.textContent = profile.name
+    profileDescribtion.textContent = profile.about
+  })
+  .catch((error) => {
+    console.log(error)
+  })
   onClose (popupEdit);
   clearValidation (popupEdit, validationConfig);
 }
+
+Promise.all([getProfileData(), getInitialCards()])
+  .then (([profile, cards]) => {
+    profileTitle.textContent = profile.name
+    profileDescribtion.textContent = profile.about
+    profileImage.style.backgroundImage = `url(${profile.avatar})`
+    cards.forEach (function(item) {
+      const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
+      cardContainer.append(card);
+    })
+  })
+  .catch ((error) => {
+    console.log(error)
+  })
+
 
 // Запуск обработчика ввода на все формах документа
 enableValidation(validationConfig); 
@@ -119,12 +138,6 @@ newCardButton.addEventListener('click', openProfileAddPopup);
 
 // Обработчк сабмита модального окна "добавить новую карточку"
 newPlaceForm.addEventListener('submit', handleAddFormSubmit);
-
-// // Вывести карточки на страницу    
-// initialCards.forEach(function (item) {
-//   const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
-//   cardContainer.append(card);
-// });
 
 // Обработчик слушателя с функцией закрытия на все кнопки закрытия
 popupCloseButtons.forEach (function (button) {
@@ -144,21 +157,7 @@ modalCards.forEach (function (modalCard) {
 });
 
 
-Promise.all([getProfileData(), getInitialCards()])
-  .then (([profile, cards]) => {
-    profileTitle.textContent = profile.name
-    profileDescribtion.textContent = profile.about
-    profileImage.style.backgroundImage = `url(${profile.avatar})`
-    cards.forEach (function(item) {
-      const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
-      cardContainer.append(card);
-    })
-  })
-  .catch ((error) => {
-    console.log(error)
-  })
 
-editProfile();
 
 
 
