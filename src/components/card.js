@@ -21,9 +21,11 @@ export function createCard(data, onDelete, onPopup, onLike) {
   const cardTitle = cardItem.querySelector('.card__title');
   const delButton = cardItem.querySelector('.card__delete-button');
   const likeButton = cardItem.querySelector('.card__like-button');
+  const likeCounter = cardItem.querySelector('.card__like-counter');
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
+  likeCounter.textContent = data.likes.length;
   delButton.addEventListener('click', onDelete);                    
   cardImage.addEventListener('click', ()=>{
     onPopup(data);
