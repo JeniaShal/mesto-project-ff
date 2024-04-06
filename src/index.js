@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { initialCards } from './cards';
+// import { initialCards } from './cards';
 import { 
   deleteCard,
   createCard,
@@ -19,7 +19,8 @@ import {
 import {
   getProfileData,
   getInitialCards,
-  editProfile
+  editProfile,
+  addCardToServer
 } from './components/api';
 
 
@@ -85,10 +86,13 @@ function openProfileAddPopup () {
 function handleAddFormSubmit(evt){
   evt.preventDefault();
   const item = {};
-  item.name = placeInput.value;
-  item.link = urlInput.value;
-  const card = createCard(item, deleteCard, showCardContent, handleLike);
-  cardContainer.prepend(card);
+  addCardToServer()
+  .then ((data) =>{
+  // item.name = placeInput.value;
+  // item.link = urlInput.value;
+  const card = createCard(data, deleteCard, showCardContent, handleLike);
+  cardContainer.prepend(card)
+})
   newPlaceForm.reset();
   onClose(popupAdd);
   clearValidation (popupAdd, validationConfig);
