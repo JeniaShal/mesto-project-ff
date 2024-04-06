@@ -58,7 +58,7 @@ export function editProfile () {
     body: JSON.stringify ({
       name: `${editProfileNameInput.value}`,
       about: `${editProfileDescriptionInput.value}`,
-    })
+    }),
   })
   .then ((res) => {
     if (res.ok) {
