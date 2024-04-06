@@ -3,7 +3,8 @@ import './pages/index.css';
 import { 
   deleteCard,
   createCard,
-  handleLike
+  handleLike,
+  toggleDelButton
  } from './components/card';
 
 import { 
@@ -72,6 +73,11 @@ function showCardContent(item) {
 // Функция открытия модального окна "редактировать профиль" 
 function openProfileEditPopup () {
   openModalCard (popupEdit);
+  getProfileData()
+  .then((profile) => {
+    nameInput.value = profile.name
+    jobInput.value = profile.about
+  })
 }
 
 // Функция открытия модального окна "добавить карточку" 
@@ -83,9 +89,9 @@ function openProfileAddPopup () {
 function handleAddFormSubmit(evt){
   evt.preventDefault();
   const item = {};
-  addCardToServer()
-  .then ((data) =>{
-  const card = createCard(data, deleteCard, showCardContent, handleLike);
+  Promise.all([getProfileData(), addCardToServer()])
+  .then (([profile, data]) =>{
+  const card = createCard(data, profile, deleteCard, showCardContent, handleLike);
   cardContainer.prepend(card)
 })
   newPlaceForm.reset();
@@ -114,7 +120,7 @@ Promise.all([getProfileData(), getInitialCards()])
     profileDescribtion.textContent = profile.about
     profileImage.style.backgroundImage = `url(${profile.avatar})`
     cards.forEach (function(item) {
-      const card = createCard(item, deleteCard, showCardContent, handleLike);                                    
+      const card = createCard(item, profile, deleteCard, showCardContent, handleLike);                                    
       cardContainer.append(card);
     })
   })
