@@ -19,9 +19,7 @@
   // Функция выгрузки данных для профиля
 export function getProfileData () {
   return fetch (`${config.baseUrl}/users/me`, {
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-  }
+    headers: config.headers
   })
     .then ((res) => {
       if (res.ok) {
@@ -36,9 +34,7 @@ export function getProfileData () {
   // Функция выгрузки карточек
 export function getInitialCards () {
   return fetch (`${config.baseUrl}/cards`, {
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-      }
+    headers: config.headers
     })
     .then ((res) => {
       if (res.ok) {
@@ -53,10 +49,7 @@ export function getInitialCards () {
 export function editProfile () {
   return fetch (`${config.baseUrl}/users/me`,  {
     method: 'PATCH',
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
     body: JSON.stringify ({
       name: `${editProfileNameInput.value}`,
       about: `${editProfileDescriptionInput.value}`,
@@ -75,10 +68,7 @@ export function editProfile () {
 export function addCardToServer () {
   return fetch (`${config.baseUrl}/cards`, {
     method: 'POST',
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-      'Content-Type': 'application/json'
-    },
+    headers: config.headers,
     body: JSON.stringify ({
       name: `${placeInput.value}`,
       link: `${urlInput.value}`,
@@ -97,9 +87,7 @@ export function addCardToServer () {
 export function deleteCardOnServer (id) {
   return fetch (`${config.baseUrl}/cards/${id}`, {
   method: 'DELETE',
-  headers: {
-    authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-    },
+  headers: config.headers,
 })
 .then ((res) => {
   if (res.ok) {
@@ -114,9 +102,7 @@ export function deleteCardOnServer (id) {
 export function SendLikeCardOnServer (id) {
   return fetch (`${config.baseUrl}/cards/likes/${id}`, {
   method: 'PUT',
-  headers: {
-    authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-    },
+  headers: config.headers,
   })
   .then ((res) => {
     if (res.ok) {
@@ -130,9 +116,7 @@ export function SendLikeCardOnServer (id) {
 export function DeleteLikeFromServer (id) {
   return fetch (`${config.baseUrl}/cards/likes/${id}`, {
     method: 'DELETE',
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-      },
+    headers: config.headers,
 })
     .then ((res) => {
       if (res.ok) {
@@ -147,10 +131,7 @@ export function DeleteLikeFromServer (id) {
 export function ChangeAvatar () {
   return fetch (`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
-    headers: {
-      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-      'Content-Type': 'application/json'
-      },
+    headers: config.headers,
     body: JSON.stringify ({
       avatar: `${avatarInput.value}`
     })

@@ -35,10 +35,11 @@ const formElement = document.querySelector('.popup__form');                     
 const nameInput = formElement.querySelector('.popup__input_type_name');         //поле имени
 const jobInput = formElement.querySelector('.popup__input_type_description');   //поле вида деятельности
 const popupEdit = document.querySelector('.popup_type_edit');                   //попап редактирования профиля 
+const profileEditSubmitButton = popupEdit.querySelector('.popup__button');      //кнопка сабмита попапа редактирования
 
 // редактирование аватара
-const popupAvatar = document.querySelector('.popup_type_new-avatar')            //попап редактирования аватара
-
+const popupAvatar = document.querySelector('.popup_type_new-avatar')            //попап изменения аватара
+const changeAvatarButton = popupAvatar.querySelector('.popup__button')          //кнопка сабмита попапа изменения аватара
 
 //добавление карточки
 const newCardButton = document.querySelector('.profile__add-button');           //кнопка добавления карточки
@@ -46,11 +47,14 @@ const popupAdd = document.querySelector('.popup_type_new-card');                
 const cardContent = document.querySelector('.popup_type_image');                //контейнер большой карточки 
 const cardLargeImage = cardContent.querySelector('.popup__image');              //большая карточка
 const cardCaption = cardContent.querySelector('.popup__caption');               //подпись к карточке
+const newCardSubmitButton = popupAdd.querySelector('.popup__button');           //кнопка сабмита попапа добавления кнопки
 
 //общее
 const popupCloseButtons = Array.from(document.querySelectorAll('.popup__close'));  //массив кнопок закрытия 
 const modalCards = Array.from(document.querySelectorAll('.popup'));             //массив модальных окон
 const profileImage = document.querySelector('.profile__image');                 //картинка профиля
+const buttonTextWhileLoading = 'Сохранение...'
+const buttonTextNormal = 'Сохранить'
 
 const validationConfig = {
   formSelector: '.popup__form',
@@ -68,6 +72,18 @@ function showCardContent(item) {
   cardCaption.textContent = item.name;
   openModalCard (cardContent);
 };
+
+// Функция обработки загрузки
+function handleLoading (isFetching, button) {
+  if (isFetching) {
+    button.textContent = buttonTextWhileLoading;
+    button.setAttribute('disabled', true);
+  }
+  else {
+    button.textContent = buttonTextNormal
+    button.removeAttribute('disabled');
+  }
+}
 
 // Функция открытия модального окна "редактировать профиль" 
 function openProfileEditPopup () {
@@ -92,7 +108,7 @@ function openAvatarEdit () {
 //Функция сабмита модального окна "добавить карточку"
 function handleAddFormSubmit(evt){
   evt.preventDefault();
-  const item = {};
+  handleLoading(true, newCardSubmitButton)
   Promise.all([getProfileData(), addCardToServer()])
   .then (([profile, data]) =>{
   const card = createCard(data, profile, showCardContent);
@@ -106,6 +122,7 @@ function handleAddFormSubmit(evt){
 // Функция сабмита модального окна "редактировать профиль"
 function handleEditFormSubmit(evt){
   evt.preventDefault();
+  handleLoading(true, profileEditSubmitButton)
   editProfile()
   .then ((profile) => {
     profileTitle.textContent = profile.name
@@ -121,10 +138,10 @@ function handleEditFormSubmit(evt){
 // Функция сабмита модального окна "редактировать аватар"
 function handleAvatarEditSubmit (evt) {
   evt.preventDefault();
+  handleLoading(true, changeAvatarButton)
   ChangeAvatar ()
   .then ((profile) => {
-    console.log(profile)
-  profileImage.style.backgroundImage = `url(${profile.avatar})`
+    profileImage.style.backgroundImage = `url(${profile.avatar})`
   })
   .catch ((error) => {
     console.log(error)
