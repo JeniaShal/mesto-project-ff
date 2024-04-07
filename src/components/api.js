@@ -7,12 +7,14 @@
   }
 
    
-  const editProfileForm = document.forms.edit_profile;                      // форма редактирования профиля
-  const editProfileNameInput = editProfileForm.elements.name                // инпут имени в форме редактирования профиля
-  const editProfileDescriptionInput = editProfileForm.elements.description  // инпут профессии в форме редактирования профиля
-  const newPlaceForm = document.forms.new_place;                                    //форма добавления новой карточки
+  const editProfileForm = document.forms.edit_profile;                              // форма редактирования профиля
+  const editProfileNameInput = editProfileForm.elements.name                        // инпут имени в форме редактирования профиля
+  const editProfileDescriptionInput = editProfileForm.elements.description          // инпут профессии в форме редактирования профиля
+  export const newPlaceForm = document.forms.new_place;                                    //форма добавления новой карточки
   const placeInput = newPlaceForm.elements.place_name;                              //поле названия карточки
   const urlInput = newPlaceForm.elements.link;                                      //поле ссылки на карточку
+  export const newAvatarForm = document.forms.edit_avatar;                                 //поле редактирования аватара
+  const avatarInput = newAvatarForm.elements.avatar;                                //инпут ссылки на аватар
 
   // Функция выгрузки данных для профиля
 export function getProfileData () {
@@ -131,7 +133,7 @@ export function DeleteLikeFromServer (id) {
     headers: {
       authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
       },
-    })
+})
     .then ((res) => {
       if (res.ok) {
         return res.json();
@@ -139,5 +141,25 @@ export function DeleteLikeFromServer (id) {
     // если ошибка, отклоняем промис
       return Promise.reject(`Ошибка: ${res.status}`);
     })
-  }
+}    
 
+// Функция отправки на сервер ссылки на новый аватар
+export function ChangeAvatar () {
+  return fetch (`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: {
+      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
+      'Content-Type': 'application/json'
+      },
+    body: JSON.stringify ({
+      avatar: `${avatarInput.value}`
+    })
+  })
+  .then ((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+  // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+}

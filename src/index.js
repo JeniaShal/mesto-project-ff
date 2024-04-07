@@ -1,10 +1,8 @@
 import './pages/index.css';
 
 import { 
-  deleteCard,
   createCard,
-  
- } from './components/card';
+} from './components/card';
 
 import { 
   openModalCard,
@@ -21,7 +19,9 @@ import {
   getInitialCards,
   editProfile,
   addCardToServer,
-  // deleteCardOnServer,
+  ChangeAvatar,
+  newPlaceForm,
+  newAvatarForm,
 } from './components/api';
 
 // @todo: DOM узлы
@@ -36,10 +36,12 @@ const nameInput = formElement.querySelector('.popup__input_type_name');         
 const jobInput = formElement.querySelector('.popup__input_type_description');   //поле вида деятельности
 const popupEdit = document.querySelector('.popup_type_edit');                   //попап редактирования профиля 
 
+// редактирование аватара
+const popupAvatar = document.querySelector('.popup_type_new-avatar')            //попап редактирования аватара
+
 
 //добавление карточки
 const newCardButton = document.querySelector('.profile__add-button');           //кнопка добавления карточки
-const newPlaceForm = document.forms.new_place;                                  //форма добавления новой карточки
 const popupAdd = document.querySelector('.popup_type_new-card');                //попап добавления новой карточки
 const cardContent = document.querySelector('.popup_type_image');                //контейнер большой карточки 
 const cardLargeImage = cardContent.querySelector('.popup__image');              //большая карточка
@@ -82,13 +84,18 @@ function openProfileAddPopup () {
   openModalCard (popupAdd);
 }
 
+// Функция открытия модального окна "редактировать аватар"
+function openAvatarEdit () {
+  openModalCard (popupAvatar);
+}
+
 //Функция сабмита модального окна "добавить карточку"
 function handleAddFormSubmit(evt){
   evt.preventDefault();
   const item = {};
   Promise.all([getProfileData(), addCardToServer()])
   .then (([profile, data]) =>{
-  const card = createCard(data, profile, deleteCard, showCardContent, handleLike);
+  const card = createCard(data, profile, showCardContent);
   cardContainer.prepend(card)
 })
   newPlaceForm.reset();
@@ -111,13 +118,29 @@ function handleEditFormSubmit(evt){
   clearValidation (popupEdit, validationConfig);
 }
 
+// Функция сабмита модального окна "редактировать аватар"
+function handleAvatarEditSubmit (evt) {
+  evt.preventDefault();
+  ChangeAvatar ()
+  .then ((profile) => {
+    console.log(profile)
+  profileImage.style.backgroundImage = `url(${profile.avatar})`
+  })
+  .catch ((error) => {
+    console.log(error)
+  })
+  newAvatarForm.reset();
+  onClose(popupAvatar);
+  clearValidation (popupAvatar, validationConfig);
+}
+
 Promise.all([getProfileData(), getInitialCards()])
   .then (([profile, cards]) => {
     profileTitle.textContent = profile.name
     profileDescribtion.textContent = profile.about
     profileImage.style.backgroundImage = `url(${profile.avatar})`
     cards.forEach (function(item) {
-      const card = createCard(item, profile, deleteCard, showCardContent);                                    
+      const card = createCard(item, profile, showCardContent);                                    
       cardContainer.append(card);
     })
     })
@@ -135,7 +158,13 @@ profileEditButton.addEventListener('click', openProfileEditPopup);
 
 // Обработчик сабмита модального окна "редактировать профиль"
 formElement.addEventListener('submit', handleEditFormSubmit);
-  
+
+// Обработчик изображения аватара - открытие модального окна редактирования аватара
+profileImage.addEventListener('click', openAvatarEdit); 
+
+// Обработчик сабмита модального окна "обновить аватар"
+newAvatarForm.addEventListener('submit', handleAvatarEditSubmit);
+
 // Обработчик кнопки "добавить место" - открытие модального окна "новая карточка" 
 newCardButton.addEventListener('click', openProfileAddPopup);
 
