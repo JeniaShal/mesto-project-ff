@@ -69,24 +69,75 @@ export function editProfile () {
   })
  }
 
-  // Функция отправки карточки на сервер
-  export function addCardToServer () {
-    return fetch (`${config.baseUrl}/cards`, {
-      method: 'POST',
-      headers: {
-        authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
-        'Content-Type': 'application/json'
+// Функция отправки карточки на сервер
+export function addCardToServer () {
+  return fetch (`${config.baseUrl}/cards`, {
+    method: 'POST',
+    headers: {
+      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify ({
+      name: `${placeInput.value}`,
+      link: `${urlInput.value}`,
+    })
+  })
+  .then ((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+  // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+}
+
+// Функция удаления карточки с сервера
+export function deleteCardOnServer (id) {
+  return fetch (`${config.baseUrl}/cards/${id}`, {
+  method: 'DELETE',
+  headers: {
+    authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
+    },
+})
+.then ((res) => {
+  if (res.ok) {
+    return res.json();
+  }
+// если ошибка, отклоняем промис
+  return Promise.reject(`Ошибка: ${res.status}`);
+})
+}
+
+// Функция отправки лайка карточки на сервер
+export function SendLikeCardOnServer (id) {
+  return fetch (`${config.baseUrl}/cards/likes/${id}`, {
+  method: 'PUT',
+  headers: {
+    authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
+    },
+  })
+  .then ((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+  // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка: ${res.status}`);
+  })
+}
+
+export function DeleteLikeFromServer (id) {
+  return fetch (`${config.baseUrl}/cards/likes/${id}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
       },
-      body: JSON.stringify ({
-        name: `${placeInput.value}`,
-        link: `${urlInput.value}`,
-      })
     })
     .then ((res) => {
       if (res.ok) {
         return res.json();
       }
-          // если ошибка, отклоняем промис
+    // если ошибка, отклоняем промис
       return Promise.reject(`Ошибка: ${res.status}`);
     })
-   }
+  }
+
