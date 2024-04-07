@@ -114,6 +114,10 @@ function handleAddFormSubmit(evt){
   const card = createCard(data, profile, showCardContent);
   cardContainer.prepend(card)
 })
+  .catch ((error) => {
+    console.log(error)
+  })
+  .finally (() => {handleLoading(false, newCardSubmitButton)})
   newPlaceForm.reset();
   onClose(popupAdd);
   clearValidation (popupAdd, validationConfig);
@@ -131,6 +135,7 @@ function handleEditFormSubmit(evt){
   .catch((error) => {
     console.log(error)
   })
+  .finally (() => {handleLoading(false, profileEditSubmitButton)})
   onClose (popupEdit);
   clearValidation (popupEdit, validationConfig);
 }
@@ -146,6 +151,7 @@ function handleAvatarEditSubmit (evt) {
   .catch ((error) => {
     console.log(error)
   })
+  .finally (() => {handleLoading(false, changeAvatarButton)})
   newAvatarForm.reset();
   onClose(popupAvatar);
   clearValidation (popupAvatar, validationConfig);
