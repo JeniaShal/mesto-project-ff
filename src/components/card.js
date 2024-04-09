@@ -1,10 +1,10 @@
 import {
-  deleteCardOnServer, SendLikeCardOnServer, DeleteLikeFromServer
+  deleteCardOnServer, sendLikeCardOnServer, deleteLikeFromServer
 } from './api'
 
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
-const cardElement = cardTemplate.querySelector('.card');
+import {
+  cardElement
+} from '../utils/constants'
 
 // Функция лайка
 function switchOnLike(icon) {
@@ -19,10 +19,9 @@ function switchOffLike(icon) {
 // Функция переключения лайка с отправкой данных на сервер
 function toggleLike(icon, data, counter) {
   if (!icon.classList.contains('card__like-button_is-active')) {
-    switchOnLike(icon)
-    SendLikeCardOnServer(data._id)
+    sendLikeCardOnServer(data._id)
     .then((response) => {
-      console.log(response.likes.length)
+      switchOnLike(icon)
       counter.textContent = response.likes.length
     })
     .catch ((error) => {
@@ -30,16 +29,22 @@ function toggleLike(icon, data, counter) {
     })
   }
   else {
-    switchOffLike(icon)
-    DeleteLikeFromServer(data._id)
+    deleteLikeFromServer(data._id)
     .then((response) => {
-      console.log(response.likes.length)
+      switchOffLike(icon)
       counter.textContent = response.likes.length
     })
     .catch ((error) => {
       console.log(error)
     })
   }
+}
+// 
+// Фeнкция поиска "лайкнутых" карточеу
+function hasLike (likes, profile) {
+  return likes.some(function(like) {
+    return like['_id'] === profile['_id']
+  })
 }
 
 
@@ -50,7 +55,7 @@ export function deleteCard(button) {
 };
 
 // @todo: Функция создания карточки
-export function createCard(data, profile, onPopup) {
+export function createCard(data, profile, handleImageClick) {
   const cardItem = cardElement.cloneNode(true);                                
   const cardImage = cardItem.querySelector('.card__image');             
   const cardTitle = cardItem.querySelector('.card__title');
@@ -61,6 +66,7 @@ export function createCard(data, profile, onPopup) {
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
+  
   likeCounter.textContent = data.likes.length;
   if (data.owner['_id'] !== profile['_id']) {
     delButton.classList.add('card__delete-button_disabled')
@@ -71,18 +77,23 @@ export function createCard(data, profile, onPopup) {
     delButton.removeAttribute('disabled')
     delButton.addEventListener('click', ()=>{
       deleteCardOnServer(dataId)
+      .then (() => {
+        deleteCard(delButton)
+      })
       .catch ((error) => {
         console.log(error)
       })
-      deleteCard(delButton)
     });
   }                 
     cardImage.addEventListener('click', ()=>{
-    onPopup(data);
+    handleImageClick(data);
   });
+  if (hasLike(data.likes, profile)) {                  
+  switchOnLike(likeButton)
+  }
+  
   likeButton.addEventListener('click', ()=> {
     toggleLike(likeButton, data, likeCounter)
-  
   });
   return cardItem;
 }
