@@ -1,20 +1,12 @@
-  const config = {
+import { checkResponse } from "../utils/constants"
+
+const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1/wff-cohort-10',
     headers: {
       authorization: 'a880a708-a06a-465b-b123-b5ee4da8a512',
       'Content-Type': 'application/json'
     }
   }
-
-// Функция проверки ответов от сервера
-function checkResponse (res) {
-  if (res.ok) {
-    return res.json()
-  }
-  return Promise.reject(`Ошибка: ${res.status}`)
-}   
-  
-
 
   // Функция выгрузки данных для профиля
 export function getProfileData () {

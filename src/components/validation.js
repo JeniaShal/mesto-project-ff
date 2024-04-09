@@ -92,4 +92,3 @@ export function enableValidation (validationConfig) {
     setEventListeners (popupForm, validationConfig);
   })
 }
-

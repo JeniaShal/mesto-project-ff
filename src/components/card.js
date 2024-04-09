@@ -2,9 +2,9 @@ import {
   deleteCardOnServer, sendLikeCardOnServer, deleteLikeFromServer
 } from './api'
 
-// @todo: Темплейт карточки
-const cardTemplate = document.querySelector('#card-template').content;
-const cardElement = cardTemplate.querySelector('.card');
+import {
+  cardElement
+} from '../utils/constants'
 
 // Функция лайка
 function switchOnLike(icon) {
@@ -39,6 +39,13 @@ function toggleLike(icon, data, counter) {
     })
   }
 }
+// 
+// Фeнкция поиска "лайкнутых" карточеу
+function hasLike (likes, profile) {
+  return likes.some(function(like) {
+    return like['_id'] === profile['_id']
+  })
+}
 
 
 // @todo: Функция удаления карточки
@@ -59,6 +66,7 @@ export function createCard(data, profile, handleImageClick) {
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
+  
   likeCounter.textContent = data.likes.length;
   if (data.owner['_id'] !== profile['_id']) {
     delButton.classList.add('card__delete-button_disabled')
@@ -80,9 +88,12 @@ export function createCard(data, profile, handleImageClick) {
     cardImage.addEventListener('click', ()=>{
     handleImageClick(data);
   });
+  if (hasLike(data.likes, profile)) {                  
+  switchOnLike(likeButton)
+  }
+  
   likeButton.addEventListener('click', ()=> {
     toggleLike(likeButton, data, likeCounter)
-  
   });
   return cardItem;
 }
