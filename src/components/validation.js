@@ -1,3 +1,15 @@
+// Функция блокировки кнопки
+function disableButton (button, validationConfig) {
+  button.setAttribute('disabled', true);
+  button.classList.add(validationConfig.inactiveButtonClass);
+}
+
+// Функция активации кнопки
+function enableButton (button, validationConfig) {
+  button.removeAttribute('disabled');
+  button.classList.remove(validationConfig.inactiveButtonClass);
+}
+
 // Функция показа сообщения об ошибке при введении текста в форму 
 function showInputError(popupForm, popupInput, errorMessage, validationConfig) {
   const errorElement = popupForm.querySelector(`.${popupInput.id}-error`);
@@ -43,12 +55,10 @@ function hasInvalidInput (inputList) {
 // Функция переключения кнопки в случае невалидности поля 
 function toggleButtonState (inputList, buttonElement, validationConfig) {
   if (hasInvalidInput(inputList)) {
-    buttonElement.setAttribute('disabled', true);
-    buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    disableButton(buttonElement, validationConfig)
   }
   else {
-    buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+    enableButton(buttonElement, validationConfig)
   }
 }
 
@@ -72,8 +82,7 @@ export function clearValidation(popupForm, validationConfig) {
   hideInputError(popupForm, popupInput, validationConfig);
   
   const buttonElement = popupForm.querySelector(validationConfig.submitButtonSelector);
-  buttonElement.setAttribute('disabled', true);
-  buttonElement.classList.add(validationConfig.inactiveButtonClass);
+  disableButton(buttonElement, validationConfig);
 }
 
 // Функция навешивания обработчика ввода на все формы документа
