@@ -81,8 +81,8 @@ function handleLoading (isFetching, button) {
 function openProfileEditPopup () {
   openModal (popupEdit);
   clearValidation(popupEdit, validationConfig)
-    nameInput.value = profileTitle.textContent
-    jobInput.value = profileDescribtion.textContent
+  nameInput.value = profileTitle.textContent
+  jobInput.value = profileDescribtion.textContent
 }
 
 // Функция открытия модального окна "добавить карточку" 
@@ -94,7 +94,7 @@ function openProfileAddPopup () {
 // Функция открытия модального окна "редактировать аватар"
 function openAvatarEdit () {
   openModal (popupAvatar);
-  clearValidation(popupAvatar)
+  clearValidation(popupAvatar, validationConfig)
 }
 
 //Функция сабмита модального окна "добавить карточку"
@@ -102,16 +102,16 @@ function handleAddFormSubmit(evt){
   evt.preventDefault();
   handleLoading(true, newCardSubmitButton)
   addCardToServer(placeInput.value, urlInput.value)
-  .then ((data) =>{
-  const card = createCard(data, data.owner, showCardContent);
-  cardContainer.prepend(card)
-  newPlaceForm.reset();
+    .then ((data) =>{
+      const card = createCard(data, data.owner, showCardContent);
+      cardContainer.prepend(card)
+      newPlaceForm.reset();
 })
-  .catch ((error) => {
-    console.log(error)
-  })
-  .finally (() => {handleLoading(false, newCardSubmitButton)})
-  onClose(popupAdd);
+    .catch ((error) => {
+      console.log(error)
+    })
+    .finally (() => {handleLoading(false, newCardSubmitButton)})
+    onClose(popupAdd);
 }
 
 // Функция сабмита модального окна "редактировать профиль"
@@ -119,15 +119,16 @@ function handleEditFormSubmit(evt){
   evt.preventDefault();
   handleLoading(true, profileEditSubmitButton)
   editProfile(editProfileNameInput.value, editProfileDescriptionInput.value)
-  .then ((profile) => {
-    profileTitle.textContent = profile.name
-    profileDescribtion.textContent = profile.about
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-  .finally (() => {handleLoading(false, profileEditSubmitButton)})
-  onClose (popupEdit);
+    .then ((profile) => {
+      profileTitle.textContent = profile.name
+      profileDescribtion.textContent = profile.about
+      onClose (popupEdit);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    .finally (() => {handleLoading(false, profileEditSubmitButton)})
+    
 }
 
 // Функция сабмита модального окна "редактировать аватар"
@@ -135,15 +136,15 @@ function handleAvatarEditSubmit (evt) {
   evt.preventDefault();
   handleLoading(true, changeAvatarButton)
   changeAvatar (avatarInput.value)
-  .then ((profile) => {
-    profileImage.style.backgroundImage = `url(${profile.avatar})`
-  })
-  newAvatarForm.reset()
-  .catch ((error) => {
-    console.log(error)
-  })
-  .finally (() => {handleLoading(false, changeAvatarButton)})
-  onClose(popupAvatar);
+    .then ((profile) => {
+      profileImage.style.backgroundImage = `url(${profile.avatar})`
+      onClose(popupAvatar)
+      newAvatarForm.reset()
+    })
+    .catch ((error) => {
+      console.log(error)
+    })
+    .finally (() => {handleLoading(false, changeAvatarButton)})
 }
 
 Promise.all([getProfileData(), getInitialCards()])

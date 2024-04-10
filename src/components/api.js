@@ -1,4 +1,4 @@
-import { checkResponse } from "../utils/constants"
+import { checkResponse } from "../utils/utils"
 
 const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1/wff-cohort-10',
@@ -56,7 +56,7 @@ export function deleteCardOnServer (id) {
   method: 'DELETE',
   headers: config.headers,
   })
-  .then (checkResponse)
+    .then (checkResponse)
 }
 
 // Функция отправки лайка карточки на сервер
@@ -65,7 +65,7 @@ export function sendLikeCardOnServer (id) {
   method: 'PUT',
   headers: config.headers,
   })
-  .then (checkResponse)
+    .then (checkResponse)
 }
 
 export function deleteLikeFromServer (id) {
@@ -73,7 +73,7 @@ export function deleteLikeFromServer (id) {
     method: 'DELETE',
     headers: config.headers,
 })
-.then (checkResponse)
+    .then (checkResponse)
 }    
 
 // Функция отправки на сервер ссылки на новый аватар
@@ -85,5 +85,5 @@ export function changeAvatar (avatar) {
       avatar: `${avatar}`
     })
   })
-  .then (checkResponse)
+    .then (checkResponse)
 }
