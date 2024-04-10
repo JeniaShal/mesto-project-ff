@@ -105,13 +105,13 @@ function handleAddFormSubmit(evt){
     .then ((data) =>{
       const card = createCard(data, data.owner, showCardContent);
       cardContainer.prepend(card)
+      onClose(popupAdd);
       newPlaceForm.reset();
 })
     .catch ((error) => {
       console.log(error)
     })
     .finally (() => {handleLoading(false, newCardSubmitButton)})
-    onClose(popupAdd);
 }
 
 // Функция сабмита модального окна "редактировать профиль"
