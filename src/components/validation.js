@@ -36,7 +36,6 @@ function checkValidity(popupForm, popupInput, validationConfig) {
     popupInput.setCustomValidity('')
   }
 
-
   if(!popupInput.validity.valid) {
     showInputError(popupForm, popupInput, popupInput.validationMessage, validationConfig);
   }

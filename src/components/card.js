@@ -89,7 +89,7 @@ export function createCard(data, profile, handleImageClick) {
     handleImageClick(data);
   });
   if (hasLike(data.likes, profile)) {                  
-  switchOnLike(likeButton)
+    switchOnLike(likeButton)
   }
   
   likeButton.addEventListener('click', ()=> {

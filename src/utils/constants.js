@@ -54,10 +54,3 @@ export const validationConfig = {
   errorClass: 'popup__input-error_active',
 }
 
-// Функция проверки ответов от сервера
-export function checkResponse (res) {
-  if (res.ok) {
-    return res.json()
-  }
-  return Promise.reject(`Ошибка: ${res.status}`)
-}   
